@@ -1,0 +1,21 @@
+theme = "catppuccin_latte"
+
+[editor]
+line-number = "relative"
+true-color = true
+color-modes = true
+mouse = false
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.statusline]
+left = ["mode", "spinner"]
+center = ["file-name"]
+right = ["position", "file-encoding", "file-type", "version-control"]
+separator = "|"
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
