@@ -19,3 +19,12 @@ separator = "|"
 mode.normal = "NORMAL"
 mode.insert = "INSERT"
 mode.select = "SELECT"
+
+[keys.normal]
+C-s = ":w"
+C-x = ":buffer-close"
+C-q = ":q"
+
+[keys.normal."backspace"]
+s = [":w", ":config-reload"]
+c = ":config-open"
