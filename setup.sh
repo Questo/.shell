@@ -22,6 +22,9 @@ sudo apt upgrade -y
 echo "Installing essential packages..."
 sudo apt install -y build-essential git helix vim htop tig dotnet-sdk-9.0
 
+# --- Install Node version manager (NVM) ---
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+
 # --- Clean up unnecessary files ---
 sudo apt autoremove -y
 
