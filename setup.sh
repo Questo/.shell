@@ -24,6 +24,9 @@ sudo apt install -y build-essential git helix vim htop tig dotnet-sdk-8.0 dotnet
 
 # --- Install Node version manager (NVM) ---
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+source "$USER_HOME/.bashrc"
+nvm install 22
+nvm use 22
 
 # --- Clean up unnecessary files ---
 sudo apt autoremove -y
