@@ -1,15 +1,22 @@
 #!/bin/bash
+set -euo pipefail
 
-# --- Determine the correct home directory for the non-root user.
-if [ -n "$SUDO_USER" ]; then
-  USER_HOME=$(eval echo "~$SUDO_USER")
-else
-  USER_HOME="$HOME"
-fi
+# -- Ensure required utilities exist
+command -v wget >/dev/null 2>&1 || { echo "wget is required but not installed. Aborting."; exit 1; }
+
+add_ppa() {
+  local identifier=$1
+  if ! grep -R "$identifier" /etc/apt/sources.list /etc/apt/sources.list.d/* > /dev/null 2>&1; then
+    echo "Adding PPA: $identifier"
+    sudo add-apt-repository "ppa:$identifier"
+  else
+    echo "PPA $identifier already exists. Skipping..."
+  fi
+}
 
 # --- Add custom PPAs ---
-sudo add-apt-repository ppa:maveonair/helix-editor
-sudo add-apt-repository ppa:dotnet/backports
+add_ppa "maveonair/helix-editor"
+add_ppa "dotnet/backports"
 
 # --- Update and Upgrade system ---
 echo "Updating package lists..."
@@ -22,16 +29,35 @@ sudo apt upgrade -y
 echo "Installing essential packages..."
 sudo apt install -y build-essential git helix vim htop tig dotnet-sdk-8.0 dotnet-sdk-9.0
 
-# --- Install Node version manager (NVM) ---
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-
 # --- Clean up unnecessary files ---
 sudo apt autoremove -y
 
+# --- Install Node version manager (NVM) if not already installed ---
+if [ ! -d "$HOME/.nvm" ]; then
+  echo "Installing NVM..."
+  wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+else
+  echo "NVM already installed. Skipping..."
+fi
+
+# --- Install oh-my-bash if not already installed ---
+if [ ! -d "$HOME/.oh-my-bash" ]; then
+  echo "Installing oh-my-bash..."
+  wget https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh -O - | bash
+else
+  echo "oh-my-bash already installed. Skipping..."
+fi
+
 # --- Setup editor and shell ---
-cp -r helix/. "$USER_HOME/.config/helix"
-cp bash_aliases "$USER_HOME/.bash_aliases"
-source "$USER_HOME/.bashrc"
+echo "Setting up Helix editor configuration..."
+mkdir -p "$HOME/.config/helix"
+cp -r helix/. "$HOME/.config/helix"
+
+echo "Copying bash aliases..."
+cp bash_aliases "$HOME/.bash_aliases"
 
 # --- Final message ---
 echo "System setup is complete!"
+
+exec bash
+
