@@ -3,6 +3,7 @@ set -euo pipefail
 
 # -- Ensure required utilities exist
 command -v wget >/dev/null 2>&1 || { echo "wget is required but not installed. Aborting."; exit 1; }
+command -v curl >/dev/null 2>&1 || { echo "curl is required but not installed. Aborting."; exit 1; }
 
 add_ppa() {
   local identifier=$1
@@ -48,6 +49,14 @@ else
   echo "oh-my-bash already installed. Skipping..."
 fi
 
+# -- Install Rust via rustup if not already installed --
+if ! command -v rustup >/dev/null 2>&1; then
+  echo "Installing Rust..."
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+else
+  echo "Rust is already installed. Skipping..."
+fi
+
 # --- Setup editor and shell ---
 echo "Setting up Helix editor configuration..."
 mkdir -p "$HOME/.config/helix"
@@ -56,8 +65,6 @@ cp -r helix/. "$HOME/.config/helix"
 echo "Copying bash aliases..."
 cp bash_aliases "$HOME/.bash_aliases"
 
-# --- Final message ---
 echo "System setup is complete!"
-
 exec bash
 
