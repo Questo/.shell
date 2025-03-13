@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # -- Ensure required utilities exist
 command -v wget >/dev/null 2>&1 || { echo "wget is required but not installed. Aborting."; exit 1; }
 command -v curl >/dev/null 2>&1 || { echo "curl is required but not installed. Aborting."; exit 1; }
@@ -60,10 +62,10 @@ fi
 # --- Setup editor and shell ---
 echo "Setting up Helix editor configuration..."
 mkdir -p "$HOME/.config/helix"
-cp -r helix/. "$HOME/.config/helix"
+cp -r "$SCRIPT_DIR/helix/." "$HOME/.config/helix"
 
 echo "Copying bash aliases..."
-cp bash_aliases "$HOME/.bash_aliases"
+cp "$SCRIPT_DIR/bash_aliases" "$HOME/.bash_aliases"
 
 echo "System setup is complete!"
 exec bash
