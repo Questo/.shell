@@ -1,4 +1,4 @@
-theme = "dracula"
+theme = "catppuccin_frappe"
 
 [editor]
 line-number = "relative"
@@ -28,3 +28,6 @@ C-q = ":q"
 [keys.normal."backspace"]
 s = [":w", ":config-reload"]
 c = ":config-open"
+t = ":open ~/.config/tmux/tmux.conf"
+"1" = ":theme dracula"
+"2" = ":theme github_light"
